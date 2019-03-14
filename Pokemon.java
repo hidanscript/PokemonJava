@@ -5,7 +5,7 @@ public class Pokemon {
 	//Statistics, Pokemon Name, Type, pokemon nature, etc...
 	private String pkName, type, nature;
 	private int hp, atk, spatk, def, spdef, speed, level;
-	private int exp, expMax;
+	private int exp, expMax, currentHp;
 	//ivs are the genes of the pokemon, it affects its stats when leveling up.
 	protected int ivs[] = new int [6];
 	public boolean isDead;
@@ -16,6 +16,7 @@ public class Pokemon {
 		this.type = type;
 		this.nature = nature;
 		this.hp = hp;
+		this.currentHp = hp;
 		this.atk = atk;
 		this.spatk = spatk;
 		this.def = def;
@@ -78,8 +79,8 @@ public class Pokemon {
 	}
 	//Function to deal damage to this object.
 	public void receiveDamage(int dmg) {
-		hp = hp - dmg;
-		if(hp <= 0) {
+		currentHp = currentHp - dmg;
+		if(currentHp <= 0) {
 			isDead = true;
 		} else {
 			isDead = false;
@@ -133,31 +134,40 @@ public class Pokemon {
 
 	//Function to increase the experience of this Pokemon.
 	public void gainExp(String foePokemon, int foeLevel, int combatType) {
-		//CombatType defines if this pokemon is battling against a wild pokemon, or against a trainer.
-		//If it is a wild pokemon, combatType = 0;
-		//If it is another value than 0, then it is a combat against a trainer.
-		double combatTypeValue = 1;
-		ExperienceDB expDB = new ExperienceDB();
-		int foeExp = expDB.checkExperience(foePokemon);
-		//CombatTypeValue checks the combat type and depending of the type of combat, its value can be 1 or 1.5.
-		//Increasing the experience gained if it was a battle against a trainer.
-		if(combatType == 0) {
-			combatTypeValue = 1;
-		} else {
-			combatTypeValue = 1.5;
+		//Checks if the Pokemon can earn experience, setting a max level of 100.
+		if(level < 100 && level >= 1) {
+			//CombatType defines if this pokemon is battling against a wild pokemon, or against a trainer.
+			//If it is a wild pokemon, combatType = 0;
+			//If it is another value than 0, then it is a combat against a trainer.
+			double combatTypeValue = 1;
+			PokemonDB expDB = new PokemonDB();
+			int foeExp = expDB.checkExperience(foePokemon);
+			//CombatTypeValue checks the combat type and depending of the type of combat, its value can be 1 or 1.5.
+			//Increasing the experience gained if it was a battle against a trainer.
+			if(combatType == 0) {
+				combatTypeValue = 1;
+			} else {
+				combatTypeValue = 1.5;
+			}
+			//calculates the experience gained.
+			exp += (foeExp * foeLevel * combatTypeValue) / 7;
+			//checks if the pokemon is ready to level up.
+			if(exp >= expMax) {
+				levelUp();
+			}
 		}
-		//calculates the experience gained.
-		exp += (foeExp * foeLevel * combatTypeValue) / 7;
-		//checks if the pokemon is ready to level up.
-		if(exp >= expMax) {
-			levelUp();
-		}
-
 	}
 	//Function to level up this Pokemon.
 	public void levelUp() {
 		exp = 0;
 		level++;
+
+		PokemonDB statsDB = new PokemonDB();
+
+		int hpbase = (int) (statsDB.baseStats(pkName, 0));
+		//int atkbase = s
+		hp += 10 + (level / 100 * ((hpbase * 2) * ivs[0]));
+		currentHp += 10 + (level / 100 * ((hpbase * 2) * ivs[0]));
 	}
 
 } 

@@ -1,5 +1,5 @@
 
-public class ExperienceDB {
+public class PokemonDB {
 
 	public int checkExperience(String foePokemon) {
 		int value = 0;
@@ -41,6 +41,24 @@ public class ExperienceDB {
 		}
 
 		return value;
+	}
+
+	public byte baseStats(String pkName, int statToGet) {
+
+		byte statsFinal[];
+		byte stats[];
+
+		switch(statToGet) {
+			case 0:
+				switch(pkName) {
+					case "Pikachu" : stats[] = { 35, 55, 40, 50, 50, 90 }; statsFinal = stats; break;
+					case "Squirtle" : stats[] = { 44, 48, 65, 50, 64, 43 }; statsFinal = stats; break;
+					default : break;
+				} break;
+			default : break;
+		}
+
+		return statsFinal[statToGet];
 	}
 
 }
