@@ -132,11 +132,13 @@ public class Pokemon {
 	}
 
 	//Function to increase the experience of this Pokemon.
-	public void gainExp(int foeExp, int foeLevel, int combatType) {
+	public void gainExp(String foePokemon, int foeLevel, int combatType) {
 		//CombatType defines if this pokemon is battling against a wild pokemon, or against a trainer.
 		//If it is a wild pokemon, combatType = 0;
 		//If it is another value than 0, then it is a combat against a trainer.
 		double combatTypeValue = 1;
+		ExperienceDB expDB = new ExperienceDB();
+		int foeExp = expDB.checkExperience(foePokemon);
 		//CombatTypeValue checks the combat type and depending of the type of combat, its value can be 1 or 1.5.
 		//Increasing the experience gained if it was a battle against a trainer.
 		if(combatType == 0) {

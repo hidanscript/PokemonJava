@@ -13,7 +13,7 @@ public class Game  {
 		game.setResizable(false);
 
 		//Pokemon( Nombre, Tipo, Vida, Ataque, Ataque especial, Defensa, Defensa especial, Velocidad, Nivel).
-		Pokemon pikachu = new Pokemon("Pikachu","Electric",20,12,9,10,11,16,5);
+		Pokemon pikachu = new Pokemon("Pikachu","Electric","Jolly",20,12,9,10,11,16,5);
 
 		pikachu.damageCalculator("Electric","Water",80,9,9,true);
 
